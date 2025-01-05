@@ -1,0 +1,26 @@
+# ignored options for 'jellyfin'
+# --detach
+name: jellyfin
+services:
+    jellyfin:
+        container_name: jellyfin
+        hostname: jellyfin
+        environment:
+            - PUID=1029
+            - PGID=100
+            - TZ=America/Toronto
+        volumes:
+            - /volume1/docker/jellyfin:/config
+            - /volume1/Media/movies:/movies
+            - /volume1/Media/Recordings:/data/tvshows
+            - /volume1/upload/:/downloads
+        working_dir: /
+        ports:
+            - 8096:8096
+        expose:
+            - "8920"
+        restart: unless-stopped
+        logging:
+            driver: db
+        runtime: runc
+        image: lscr.io/linuxserver/jellyfin:latest

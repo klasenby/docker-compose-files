@@ -1,0 +1,18 @@
+# ignored options for 'portainer-ee'
+# --detach
+name: portainer-ee
+services:
+    portainer-ee:
+        container_name: portainer-ee
+        hostname: portainer
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - /nfs/docker_config/portainer:/data
+        working_dir: /
+        ports:
+            - 8000:8000
+            - 9000:9000
+            - 9443:9443
+        restart: always
+        runtime: runc
+        image: portainer/portainer-ee:latest

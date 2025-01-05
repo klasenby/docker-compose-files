@@ -1,0 +1,21 @@
+# ignored options for 'grafana-enterprise'
+# --detach
+name: grafana
+services:
+    grafana-enterprise:
+        container_name: grafana
+        hostname: grafana
+#        user: "472"
+        environment:
+            - PUID=1029
+            - PGID=100
+            - TZ=America/Toronto
+            - GF_AUTH_ANONYMOUS_ENABLED=true
+        volumes:
+            - /nfs/docker_config/grafana:/var/lib/grafana
+        working_dir: /usr/share/grafana
+        ports:
+            - 3000:3000
+        restart: unless-stopped
+        runtime: runc
+        image: grafana/grafana-enterprise:latest

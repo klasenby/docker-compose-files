@@ -1,0 +1,20 @@
+# ignored options for 'mariadb'
+# --detach
+name: mariadb
+services:
+    mariadb:
+        container_name: mariadb
+        hostname: mariadb
+        environment:
+            - PUID=1029
+            - PGID=100
+            - TZ=America/Toronto
+            - MYSQL_ROOT_PASSWORD=
+        volumes:
+            - /docker/mariadb:/config
+        working_dir: /
+        ports:
+            - 3306:3306
+        restart: unless-stopped
+        runtime: runc
+        image: lscr.io/linuxserver/mariadb:latest

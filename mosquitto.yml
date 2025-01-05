@@ -1,0 +1,18 @@
+# ignored options for 'eclipse-mosquitto'
+# --detach
+name: mosquitto 
+services:
+    eclipse-mosquitto:
+        container_name: mosquitto
+        hostname: docker02
+        volumes:
+            - /nfs/docker_config/mosquitto/log:/mosquitto/log
+            - /nfs/docker_config/mosquitto/config:/mosquitto/config
+            - /nfs/docker_config/mosquitto/data:/mosquitto/data
+        network_mode: host
+        working_dir: /
+        restart: always
+        runtime: runc
+        tty: true
+        image: eclipse-mosquitto:latest
+        command: /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf

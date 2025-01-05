@@ -1,0 +1,56 @@
+name: homeassistant
+services:
+  home-assistant:
+    container_name: homeassistant
+    hostname: homeassistant
+    volumes:
+      - /nfs/docker_config/homeassistant:/config:rw
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    networks:
+      - homelab
+    privileged: true
+    working_dir: /config
+    restart: unless-stopped
+    labels:
+      - com.docker.compose.oneoff=False
+      - com.docker.compose.image=sha256:22e08126994a78a7766bf753ed6d998f7919e17c321873a65e7fb6f74f8add15
+      - com.docker.compose.config-hash=a4c79d288fbf51896835d0c014458f14f4001a16789d4bad76952fd0f785dfe9
+      - com.docker.compose.service=homeassistant
+      - com.docker.compose.version=2.20.2
+      - com.docker.compose.project.config_files=/data/compose/4/v1/docker-compose.yml
+      - com.docker.compose.project=homeassistant
+      - com.docker.compose.project.environment_file=/data/compose/4/v1/stack.env
+      - com.docker.compose.project.working_dir=/data/compose/4/v1
+      - com.docker.compose.container-number=1
+      - com.docker.compose.depends_on=
+    runtime: runc
+    image: ghcr.io/home-assistant/home-assistant:stable
+    ports:
+      - "8123:8123"  # Exposing Home Assistant port
+
+  espresense:
+    image: espresense/espresense-companion
+    ports:
+      - 8267:8267  # Exposing ESPResense port
+    volumes:
+      - /nfs/docker_config/espresense:/config/espresense
+    networks:
+      - homelab
+
+  node-red:
+    container_name: node-red
+    image: nodered/node-red:latest
+    environment:
+      - TZ=America/Toronto
+    volumes:
+      - /nfs/docker_config/nodered:/data
+    ports:
+      - "1880:1880"  # Exposing Node-RED port
+    networks:
+      - homelab
+    restart: unless-stopped
+
+networks:
+  homelab:
+    driver: bridge
